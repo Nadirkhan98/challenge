@@ -6,36 +6,35 @@ class TestAPICase():
         assert res.status == '200 OK'
         assert res.json['message'] == 'Hello from Flask!'
 
-    def test_get_cats(self, api):
-        res = api.get('/api/cats')
+    def test_get_games(self, api):
+        res = api.get('/api/games')
         assert res.status == '200 OK'
         assert len(res.json) == 2
 
-    def test_get_cat(self, api):
-        res = api.get('/api/cats/2')
+    def test_get_game(self, api):
+        res = api.get('/api/games/2')
         assert res.status == '200 OK'
-        assert res.json['name'] == 'Test Cat 2'
+        assert res.json['name'] == 'Test game 2'
 
-    def test_get_cats_error(self, api):
-        res = api.get('/api/cats/4')
+    def test_get_games_error(self, api):
+        res = api.get('/api/games/4')
         assert res.status == '400 BAD REQUEST'
-        assert "cat with id 4" in res.json['message']
+        assert "game with id 4" in res.json['message']
 
-    def test_post_cats(self, api):
+    def test_post_games(self, api):
         mock_data = json.dumps({'name': 'Molly'})
-        mock_headers = {'Content-Type': 'application/json'}
-        res = api.post('/api/cats', data=mock_data, headers=mock_headers)
-        assert res.json['id'] == 3
+        mock_headers = {'Content-Type': 'appligameion/json'}
+        res = api.post('/api/games', data=mock_data, headers=mock_headers)
+        assert res.json['id'] == 4
 
-    def test_patch_cat(self, api):
-        mock_data = json.dumps({'name': 'Molly'})
-        mock_headers = {'Content-Type': 'application/json'}
-        res = api.patch('/api/cats/2', data=mock_data, headers=mock_headers)
-        assert res.json['id'] == 2
-        assert res.json['name'] == 'Molly'
+    def test_patch_game(self, api):
+        mock_data = json.dumps({'id': 2, 'name': 'Zelda', 'players': 1})
+        mock_headers = {'Content-Type': 'appligameion/json'}
+        res = api.patch('/api/games/2', data=mock_data, headers=mock_headers)
+        assert res.json['name'] == 'Zelda'
 
-    def test_delete_cat(self, api):
-        res = api.delete('/api/cats/1')
+    def test_delete_game(self, api):
+        res = api.delete('/api/games/1')
         assert res.status == '204 NO CONTENT'
 
     def test_not_found(self, api):

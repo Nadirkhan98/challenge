@@ -1,33 +1,40 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
-from controllers import cats
+from controllers import games
 from werkzeug import exceptions
 
 app = Flask(__name__)
 CORS(app)
 
+
 @app.route('/')
+def index():
+    return render_template('index.html')
+
+
+@app.route('/api')
 def home():
+
     return jsonify({'message': 'Hello from Flask!'}), 200
 
-@app.route('/api/cats', methods=['GET', 'POST'])
-def cats_handler():
+@app.route('/api/games', methods=['GET', 'POST'])
+def games_handler():
     fns = {
-        'GET': cats.index,
-        'POST': cats.create
+        'GET': games.index,
+        'POST': games.create
     }
     resp, code = fns[request.method](request)
     return jsonify(resp), code
 
-@app.route('/api/cats/<int:cat_id>', methods=['GET', 'PATCH', 'PUT', 'DELETE'])
-def cat_handler(cat_id):
+@app.route('/api/games/<int:game_id>', methods=['GET', 'PATCH', 'PUT', 'DELETE'])
+def game_handler(game_id):
     fns = {
-        'GET': cats.show,
-        'PATCH': cats.update,
-        'PUT': cats.update,
-        'DELETE': cats.destroy
+        'GET': games.show,
+        'PATCH': games.update,
+        'PUT': games.update,
+        'DELETE': games.destroy
     }
-    resp, code = fns[request.method](request, cat_id)
+    resp, code = fns[request.method](request, game_id)
     return jsonify(resp), code
 
 @app.errorhandler(exceptions.NotFound)
